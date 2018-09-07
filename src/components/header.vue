@@ -11,7 +11,7 @@
 				menuList: [
 					{
 						path: '/home',
-						name: '首页'
+						name: '首页2'
 					},
 					{
 						path: '/login',
