@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "wb": "set PRODUCTION=1 && webpack --progress --hide-modules",
     "port": "webpack-dev-server --open --progress --colors --inline --port 9090",
-    "dev": "webpack-dev-server --open --port 3000 --hot"
+    "dev": "webpack-dev-server --progress --profile --colors --inline --port 4000 --open"
   },
   "keywords": [],
   "author": "",
@@ -40,6 +40,7 @@
     "jquery": "^3.3.1",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.1.3",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "webpack": "^2.6.1"
   }
 }
