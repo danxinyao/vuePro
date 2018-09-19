@@ -1,4 +1,4 @@
-var proxyApi = '' // 代理服务器
+var proxyApi = 'www.baidu.com' // 代理服务器
 // 先清空 build 文件夹下的文件
 var buildFolder = 'dist'
 var fs = require('fs')
@@ -77,6 +77,43 @@ var plugins = [
     inject: true //此参数必须加上，不加不注入
 }))*/
 // 当以命令行形式运行 webpack 或 webpack-dev-server 的时候，工具会发现，我们并没有提供 要打包 的文件的 入口 和 出口文件，此时，他会检查项目根目录中的配置文件，并读取这个文件，就拿到了导出的这个 配置对象，然后根据这个对象，进行打包构建
+//发生编译时，压缩，版本控制
+var devtool = false, //是否开启source-map
+    devServer = {} //代理设置
+if(process.env.PRODUCTION) {
+  console.log('wuxin-压缩...')
+  plugins.push(new webpack.optimize.UglifyJsPlugin({
+    beautify: true,
+    comments: false,
+    compress: {
+      warnings: false,
+      drop_debugger: true,
+      drop_console: true,
+      collapse_vars: true,
+      reduce_vars: true
+    }
+  }))
+  devtool = "#source-map" //生产环境不开启source-map
+  devServer = {}
+}else {
+  console.log('代理...')
+  devtool = "#eval-source-map"
+  devServer = {
+    historyApiFallback: true,
+    host: 'localhost',
+    proxy: {
+        '/Api/*': proxyApi,
+        '/api/*': proxyApi,
+        '/ImageTemp/*': proxyApi,
+        '/Import/*': proxyApi,
+        '/ImportImage/*': proxyApi,
+        '/Export/*': proxyApi,
+        '/Upload/*': proxyApi
+    },
+  }
+}
+
+
 module.exports = {
   entry: path.join(__dirname, './src/main.js'), // 入口文件
   output: { // 指定输出选项
@@ -85,6 +122,8 @@ module.exports = {
     filename: production ? '[name].[chunkhash].js' : '[name].js' // 指定输出文件的名称
   },
   plugins: plugins,
+  devtool: devtool,
+  devServer: devServer,
 /*  plugins: [ // 所有webpack  插件的配置节点
     new htmlWebpackPlugin({
       template: path.join(__dirname, './index.html'), // 指定模板文件路径
